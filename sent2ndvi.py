@@ -146,27 +146,54 @@ class Sent2DownProcNDVI:
         return img.select('B.*').updateMask(not_cld_shdw)
 
 
-    # 4) LOAD SHAPEFILE
+    # 4) FUNCTION TO LOAD A SHAPEFILE
     def load_shape_file(self, filename):
+
+        """
+        This function is used to load a shapefile using geemap.
+        :param filename: shapefile name
+        :return: returns a feature collection
+        """
         return geemap.shp_to_ee(filename)
 
 
-    # 5) DOWNLOAD IMAGE
-    def download(self, img, shp, scale, filename):
-        img = img.clip(shp).unmask()
+    # 5) FUNCTION TO DOWNLOAD AN IMAGE
+    def download(self, img, geom, scale, filename):
+
+        """
+        This function is used to download an image in the form of a tif.
+        :param img: image to be downloaded
+        :param geom: feature collection that is converted to geometry should be used
+        :param scale: resolution
+        :param filename: name of the file with which it should be downloaded in the local drive
+        :return: none
+        """
+        img = img.clip(geom).unmask()
         geemap.ee_export_image(
-            img, filename=filename, scale=scale, region=shp, file_per_band=False
+            img, filename=filename, scale=scale, region=geom, file_per_band=False
         )
 
 
-    # 6) CREATE NDVI
+    # 6) FUNCTION TO CREATE AN NDVI
     def ndvi(self, img):
+
+        """
+        This function extracts nir, red band from the image passed as an argument and returns an ndvi image
+        :param img: image from which ndvi should be extracted
+        :return: returns an ndvi image
+        """
         nir = img.select('B8')
         red = img.select('B4')
         ndvi = nir.subtract(red).divide(nir.add(red)).rename('ndvi')
         return ndvi
 
 
-    # 7) CLOUD FREE COMPOSITE
+    # 7) FUNCTION TO CREATE A CLOUD FREE COMPOSITE
     def cloud_masked_composite(self, collection):
-       return collection.map(self.add_cld_shdw_mask).map(self.apply_cld_shdw_mask).median()
+        """
+        This function creates a composite out of an image collection after masking the clouds in the composite and
+        returns the composite
+        :param collection: image collection from which composite should be created
+        :return:
+        """
+        return collection.map(self.add_cld_shdw_mask).map(self.apply_cld_shdw_mask).median()
