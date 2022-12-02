@@ -20,7 +20,7 @@ This repository contains the python module to download, pre-process, and create 
 ```
     
 
-## Documentation
+## Reference
 
 ### 1. Attributes
     AOI -> This is the area of interest
