@@ -15,7 +15,7 @@ class Sent2DownProcNDVI:
     BUFFER = 50
 
     # 1) DEFINE A FUNCTION TO FETCH AND FILTER SR AND S2CLOUDLESS DATA USING EARTH ENGINE API
-    def get_s2_sr_cld_col(self, aoi, start_date, end_date):
+    def get_collection(self, aoi, start_date, end_date):
 
         """
         sentinel 2 surface reflectance collection and sentinel-2 cloud probability collection are fetched based on the
