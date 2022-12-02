@@ -167,3 +167,6 @@ class Sent2DownProcNDVI:
         return ndvi
 
 
+    # 7) CLOUD FREE COMPOSITE
+    def cloud_masked_composite(self, collection):
+       return collection.map(self.add_cld_shdw_mask).map(self.apply_cld_shdw_mask).median()
