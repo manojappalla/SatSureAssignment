@@ -22,8 +22,9 @@ class Sent2DownProcNDVI:
         sentinel 2 surface reflectance collection and sentinel-2 cloud probability collection are fetched based on the
         parameters entered by the user and two collections are joined together and the image collection is returned.
 
-        :param start_date:
-        :param end_date:
+        :param aoi: Area of interest
+        :param start_date: Date from which you want to start searching for images
+        :param end_date: Date from which you want to stop searching for images
         :return: image collection
         """
 
@@ -58,9 +59,10 @@ class Sent2DownProcNDVI:
         """
         Here we access the s2cloudless image joined in the get_collection function and select the probability band.
         if the probability of a pixel is greater than threshold value then the pixel is considered cloud and the cloud
-        probability and cloud mask are added as bands to the image
+        probability and cloud mask are added as bands to every image in the image collection
 
-        :return: an image with added cld_prb and is_cloud bands
+        :param img:
+        :return:
         """
 
         # Get s2cloudless image, subset the probability band.
@@ -79,9 +81,8 @@ class Sent2DownProcNDVI:
         water. Next, the direction of cloud shadow is determined and the cloud shadows are projected based on the
         distance specified. Then the intersection of the dark pixels with the cloud shadows is identified and the bands
         are added to the input image.
+
         :param img:
-        :param nir_dark_thresh:
-        :param cld_prj_dist:
         :return:
         """
         # Identify water pixels from the SCL band.
@@ -114,10 +115,6 @@ class Sent2DownProcNDVI:
         Add the cloud shadow mask to the image as a new band.
 
         :param img:
-        :param cld_prb_thresh:
-        :param nir_dark_thresh:
-        :param cld_prj_dist:
-        :param buffer:
         :return:
         """
 
@@ -154,8 +151,9 @@ class Sent2DownProcNDVI:
     def load_shape_file(self, filename):
 
         """
-        This function is used to load a shapefile using geemap.
-        :param filename: shapefile name
+        This function is used to load a shapefile as a feature collection using geemap.
+
+        :param filename: shapefile path
         :return: returns a feature collection
         """
         return geemap.shp_to_ee(filename)
@@ -167,9 +165,10 @@ class Sent2DownProcNDVI:
 
         """
         This function is used to download an image in the form of a tif.
+
         :param img: image to be downloaded
         :param geom: feature collection that is converted to geometry should be used
-        :param scale: resolution
+        :param scale: resolution in meters
         :param filename: name of the file with which it should be downloaded in the local drive
         :return: none
         """
@@ -186,6 +185,7 @@ class Sent2DownProcNDVI:
 
         """
         This function extracts nir, red band from the image passed as an argument and returns an ndvi image
+
         :param img: image from which ndvi should be extracted
         :return: returns an ndvi image
         """
@@ -200,8 +200,8 @@ class Sent2DownProcNDVI:
     # 7) FUNCTION TO CREATE A CLOUD FREE COMPOSITE
     def cloud_masked_composite(self, collection):
         """
-        This function creates a composite out of an image collection after masking the clouds in the composite and
-        returns the composite
+        This function creates a composite out of an image collection after masking the clouds and returns the composite
+
         :param collection: image collection from which composite should be created
         :return:
         """
