@@ -14,6 +14,7 @@ class Sent2DownProcNDVI:
     CLD_PRJ_DIST = 1
     BUFFER = 50
 
+    # ***************************************** FETCH DATA - START ******************************************
     # 1) DEFINE A FUNCTION TO FETCH AND FILTER SR AND S2CLOUDLESS DATA USING EARTH ENGINE API
     def get_collection(self, aoi, start_date, end_date):
 
@@ -47,8 +48,10 @@ class Sent2DownProcNDVI:
             })
         }))
 
+    # ******************************************* FETCH DATA - END ******************************************
 
 
+    # ***************************************** PRE-PROCESSING - START **************************************
     # 2) CLOUD MASK COMPONENT FUNCTION DEFINITIONS
     def add_cloud_bands(self, img):
 
@@ -144,6 +147,7 @@ class Sent2DownProcNDVI:
 
         # Subset reflectance bands and update their masks, return the result.
         return img.select('B.*').updateMask(not_cld_shdw)
+    # ***************************************** PRE-PROCESSING - END ****************************************
 
 
     # 4) FUNCTION TO LOAD A SHAPEFILE
@@ -157,6 +161,7 @@ class Sent2DownProcNDVI:
         return geemap.shp_to_ee(filename)
 
 
+    # ***************************************** DOWNLOAD - START *******************************************
     # 5) FUNCTION TO DOWNLOAD AN IMAGE
     def download(self, img, geom, scale, filename):
 
@@ -172,8 +177,10 @@ class Sent2DownProcNDVI:
         geemap.ee_export_image(
             img, filename=filename, scale=scale, region=geom, file_per_band=False
         )
+    # ***************************************** DOWNLOAD - END *******************************************
 
 
+    # ***************************************** NDVI - START *******************************************
     # 6) FUNCTION TO CREATE AN NDVI
     def ndvi(self, img):
 
@@ -186,8 +193,10 @@ class Sent2DownProcNDVI:
         red = img.select('B4')
         ndvi = nir.subtract(red).divide(nir.add(red)).rename('ndvi')
         return ndvi
+    # ***************************************** NDVI - START *******************************************
 
 
+    # ***************************************** CLOUD COMPOSITE - START *******************************************
     # 7) FUNCTION TO CREATE A CLOUD FREE COMPOSITE
     def cloud_masked_composite(self, collection):
         """
@@ -197,3 +206,4 @@ class Sent2DownProcNDVI:
         :return:
         """
         return collection.map(self.add_cld_shdw_mask).map(self.apply_cld_shdw_mask).median()
+    # ***************************************** CLOUD COMPOSITE - END *******************************************
