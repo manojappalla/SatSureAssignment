@@ -196,7 +196,7 @@ class Sent2DownProcNDVI:
     # ***************************************** NDVI - START *******************************************
 
 
-    # ***************************************** CLOUD COMPOSITE - START *******************************************
+    # ***************************************** CREATE COMPOSITE - START *******************************************
     # 7) FUNCTION TO CREATE A CLOUD FREE COMPOSITE
     def cloud_masked_composite(self, collection):
         """
@@ -206,4 +206,4 @@ class Sent2DownProcNDVI:
         :return:
         """
         return collection.map(self.add_cld_shdw_mask).map(self.apply_cld_shdw_mask).median()
-    # ***************************************** CLOUD COMPOSITE - END *******************************************
+    # ***************************************** CREATE COMPOSITE - END *******************************************
