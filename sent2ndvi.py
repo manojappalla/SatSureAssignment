@@ -56,7 +56,7 @@ class Sent2DownProcNDVI:
     def add_cloud_bands(self, img):
 
         """
-        Here we access the s2cloudless image joined in the get_s2_sr_cld_col function and select the probability band.
+        Here we access the s2cloudless image joined in the get_collection function and select the probability band.
         if the probability of a pixel is greater than threshold value then the pixel is considered cloud and the cloud
         probability and cloud mask are added as bands to the image
 
