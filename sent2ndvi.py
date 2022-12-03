@@ -4,7 +4,7 @@ import geemap
 
 class Sent2DownProcNDVI:
 
-    # PARAMETERS
+    # DEFAULT PARAMETERS
     AOI = ee.Geometry.Point(-122.269, 45.701)
     START_DATE = '2020-06-01'
     END_DATE = '2020-06-02'
